@@ -16,7 +16,7 @@
     <![endif]-->
   </head>
   <body class="container">
-    <h1>Crypto Compare</h1>
+    <h1>Crypto Currency Comparison</h1>
 
     <div class="row">
       <div class="jumbotron col-xs-offset-2 col-xs-8">
@@ -42,7 +42,7 @@
               Symbol
             </td>
             <td>
-              Price (USD)
+              Price (GBP)
             </td>
             <td>
               1H
@@ -54,7 +54,7 @@
               1W
             </td>
             <td>
-              Market Cap (USD)
+              Market Cap (GBP)
             </td>
           </tr>
         </thead>
@@ -71,7 +71,7 @@
               {{ coin.symbol}}
             </td>
             <td>
-              {{ coin.price_usd | currency }}
+              {{ coin.price_gbp | currency('£') }}
             </td>
             <td v-bind:style="getColor(coin.percent_change_1h)">
               <span v-if="coin.percent_change_1h > 0">+</span> {{ coin.percent_change_1h }}%
@@ -83,7 +83,7 @@
               <span v-if="coin.percent_change_7d > 0">+</span> {{ coin.percent_change_7d }}%
             </td>
             <td>
-              {{ coin.market_cap_usd | currency }}
+              {{ coin.market_cap_gbp | currency('£') }}
             </td>
           </tr>
         </tbody>
