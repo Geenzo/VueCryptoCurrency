@@ -19,14 +19,11 @@ let app = new Vue({
     //Loads all cryptocurrency data, used to grab logos
     getCoinData: function() {
       let self = this;
-      console.log("In get coin data");
 
       axios.get(CRYPOCOMPARE_API_URI + "/api/data/coinlist")
         .then((resp) => {
           this.coinData = resp.data.Data;
           this.getCoins();
-          console.log('in getCoinData get');
-          console.log(this.coinData);
         })
         .catch((resp) => {
           this.getCoins();
@@ -38,13 +35,10 @@ let app = new Vue({
     //Gets all cryptocurrencys by value, data refreshed every 5 minutes but back end API service
     getCoins: function() {
       let self = this;
-      console.log('In get coins');
 
-      axios.get(COINMARKETCAP_API_URI + "/v1/ticker/?limit=8")
+      axios.get(COINMARKETCAP_API_URI + "/v1/ticker/?limit=10")
         .then((resp) => {
           this.coins = resp.data;
-          console.log('In get coins GET');
-          console.log(this.coinData);
         })
         .catch((err) => {
           console.error(err);
@@ -52,7 +46,8 @@ let app = new Vue({
     },
 
     getCoinImage: function(symbol) {
-      console.log(CRYPOCOMPARE_API_URI + this.coinData[symbol].ImageUrl);
+      symbol = (symbol === "MIOTA" ? "IOT" : symbol);
+      symbol = (symbol === "VERI" ? "VRM" : symbol);
       return CRYPOCOMPARE_API_URI + this.coinData[symbol].ImageUrl;
     },
 
