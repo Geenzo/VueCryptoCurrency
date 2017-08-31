@@ -14,3 +14,15 @@ td img {
   margin-top: 5em;
   margin-bottom: 5em;
 }
+
+#HighlightImage {
+  width: 70px;
+}
+
+.DailyHighest {
+  text-align: center;
+}
+
+.WeeklyHighest {
+  text-align: center;
+}

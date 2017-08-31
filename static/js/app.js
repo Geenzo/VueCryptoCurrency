@@ -11,7 +11,9 @@ let app = new Vue({
   el: "#app",
   data: {
     coins: [],
-    coinData: {}
+    coinData: {},
+    highestDailyChange: {},
+    highestWeeklyChange: {}
   },
 
   methods: {
@@ -32,6 +34,15 @@ let app = new Vue({
         });
     },
 
+    getMaxOfArray: function(numArray) {
+      let max1DayChange = Math.max.apply(Math,numArray.map(function(o){return o.percent_change_24h;}));
+      this.highestDailyChange = numArray.find(function(o){ return o.percent_change_24h == max1DayChange; })
+
+      let max7dayChange = Math.max.apply(Math,numArray.map(function(o){return o.percent_change_7d;}));
+      this.highestWeeklyChange = numArray.find(function(o){ return o.percent_change_7d == max7dayChange; })
+
+    },
+
     //Gets all cryptocurrencys by value, data refreshed every 5 minutes but back end API service
     getCoins: function() {
       let self = this;
@@ -39,6 +50,7 @@ let app = new Vue({
       axios.get(COINMARKETCAP_API_URI + "/v1/ticker/?convert=GBP&limit=10")
         .then((resp) => {
           this.coins = resp.data;
+          this.getMaxOfArray(this.coins)
         })
         .catch((err) => {
           console.error(err);
