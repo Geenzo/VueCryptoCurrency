@@ -9,22 +9,20 @@ let COINMARKETCAP_API_URI = "https://api.coinmarketcap.com";
 
 //rate at which the chart is updated
 let UPDATE_INTERVAL = 60 * 1000;
-
 let app = new Vue({
   el: "#app",
   data: {
     coins: [],
     coinData: {},
     highestDailyChange: {},
-    highestWeeklyChange: {}
+    highestWeeklyChange: {},
+    loaded: false,
   },
 
   methods: {
 
     //Loads all cryptocurrency data, used to grab logos
     getCoinData: function() {
-      let self = this;
-
       axios.get(CRYPOCOMPARE_API_URI + "/data/all/coinlist")
         .then((resp) => {
           this.coinData = resp.data.Data;
@@ -48,12 +46,11 @@ let app = new Vue({
 
     //Gets all cryptocurrencys by value, data refreshed every 5 minutes but back end API service
     getCoins: function() {
-      let self = this;
-
       axios.get(COINMARKETCAP_API_URI + "/v1/ticker/?convert=GBP&limit=10")
         .then((resp) => {
           this.coins = resp.data;
           this.getMaxOfArray(this.coins)
+          this.loaded = true;
         })
         .catch((err) => {
           console.error(err);
@@ -72,7 +69,7 @@ let app = new Vue({
 
   },
 
-  created: function() {
+  mounted: function() {
     this.getCoinData();
   },
 

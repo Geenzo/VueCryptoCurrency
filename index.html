@@ -28,102 +28,109 @@
     </div>
 
     <div id="app">
+      <div v-if="coins.length > 0">
+        <div class="row">
+          <div class="DailyHighest col-md-6 col-sm-6">
+            <h3>Daily Highest Change</h3>
+            <img id="HighlightImage" v-bind:src="getCoinImage(highestDailyChange.symbol)">
+            <p>
+              Name: {{ highestDailyChange.name }}
+            </p>
+            <p>
+              Symbol: {{ highestDailyChange.symbol}}
+            </p>
+            <p>
+              Current Price: {{ highestDailyChange.price_gbp | currency('£') }}
+            </p>
+            <p v-bind:style="getColor(highestDailyChange.percent_change_24h)">
+              % Change in Last Day: <span v-if="highestDailyChange.percent_change_24h > 0">+</span> {{ highestDailyChange.percent_change_24h }}%
+            </p>
+          </div>
+          <div class="WeeklyHighest col-md-6 col-sm-6">
+            <h3>Weekly Highest Change</h3>
+            <img id="HighlightImage" v-bind:src="getCoinImage(highestWeeklyChange.symbol)">
+            <p>
+              Name: {{ highestWeeklyChange.name }}
+            </p>
+            <p>
+              Symbol: {{ highestWeeklyChange.symbol}}
+            </p>
+            <p>
+              Current Price: {{ highestWeeklyChange.price_gbp | currency('£') }}
+            </p>
+            <p v-bind:style="getColor(highestWeeklyChange.percent_change_7d)">
+              % Change in Last Day: <span v-if="highestWeeklyChange.percent_change_7d > 0">+</span> {{ highestWeeklyChange.percent_change_7d }}%
+            </p>
+          </div>
+        </div>
+        <hr />
 
-      <div class="row">
-        <div class="DailyHighest col-md-6 col-sm-6">
-          <h3>Daily Highest Change</h3>
-          <img id="HighlightImage" v-bind:src="getCoinImage(highestDailyChange.symbol)">
-          <p>
-            Name: {{ highestDailyChange.name }}
-          </p>
-          <p>
-            Symbol: {{ highestDailyChange.symbol}}
-          </p>
-          <p>
-            Current Price: {{ highestDailyChange.price_gbp | currency('£') }}
-          </p>
-          <p v-bind:style="getColor(highestDailyChange.percent_change_24h)">
-            % Change in Last Day: <span v-if="highestDailyChange.percent_change_24h > 0">+</span> {{ highestDailyChange.percent_change_24h }}%
-          </p>
-        </div>
-        <div class="WeeklyHighest col-md-6 col-sm-6">
-          <h3>Weekly Highest Change</h3>
-          <img id="HighlightImage" v-bind:src="getCoinImage(highestWeeklyChange.symbol)">
-          <p>
-            Name: {{ highestWeeklyChange.name }}
-          </p>
-          <p>
-            Symbol: {{ highestWeeklyChange.symbol}}
-          </p>
-          <p>
-            Current Price: {{ highestWeeklyChange.price_gbp | currency('£') }}
-          </p>
-          <p v-bind:style="getColor(highestWeeklyChange.percent_change_7d)">
-            % Change in Last Day: <span v-if="highestWeeklyChange.percent_change_7d > 0">+</span> {{ highestWeeklyChange.percent_change_7d }}%
-          </p>
-        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <td>
+                Rank
+              </td>
+              <td>
+                Name
+              </td>
+              <td>
+                Symbol
+              </td>
+              <td>
+                Price (GBP)
+              </td>
+              <td>
+                1H
+              </td>
+              <td>
+                1D
+              </td>
+              <td>
+                1W
+              </td>
+              <td>
+                Market Cap (GBP)
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="coin in coins">
+              <td>
+                {{ coin.rank }}
+              </td>
+              <td>
+                <img v-bind:src="getCoinImage(coin.symbol)">
+                {{ coin.name }}
+              </td>
+              <td>
+                {{ coin.symbol}}
+              </td>
+              <td>
+                {{ coin.price_gbp | currency('£') }}
+              </td>
+              <td v-bind:style="getColor(coin.percent_change_1h)">
+                <span v-if="coin.percent_change_1h > 0">+</span> {{ coin.percent_change_1h }}%
+              </td>
+              <td v-bind:style="getColor(coin.percent_change_24h)">
+                <span v-if="coin.percent_change_24h > 0">+</span> {{ coin.percent_change_24h }}%
+              </td>
+              <td v-bind:style="getColor(coin.percent_change_7d)">
+                <span v-if="coin.percent_change_7d > 0">+</span> {{ coin.percent_change_7d }}%
+              </td>
+              <td>
+                {{ coin.market_cap_gbp | currency('£') }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <hr />
-
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <td>
-              Rank
-            </td>
-            <td>
-              Name
-            </td>
-            <td>
-              Symbol
-            </td>
-            <td>
-              Price (GBP)
-            </td>
-            <td>
-              1H
-            </td>
-            <td>
-              1D
-            </td>
-            <td>
-              1W
-            </td>
-            <td>
-              Market Cap (GBP)
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="coin in coins">
-            <td>
-              {{ coin.rank }}
-            </td>
-            <td>
-              <img v-bind:src="getCoinImage(coin.symbol)">
-              {{ coin.name }}
-            </td>
-            <td>
-              {{ coin.symbol}}
-            </td>
-            <td>
-              {{ coin.price_gbp | currency('£') }}
-            </td>
-            <td v-bind:style="getColor(coin.percent_change_1h)">
-              <span v-if="coin.percent_change_1h > 0">+</span> {{ coin.percent_change_1h }}%
-            </td>
-            <td v-bind:style="getColor(coin.percent_change_24h)">
-              <span v-if="coin.percent_change_24h > 0">+</span> {{ coin.percent_change_24h }}%
-            </td>
-            <td v-bind:style="getColor(coin.percent_change_7d)">
-              <span v-if="coin.percent_change_7d > 0">+</span> {{ coin.percent_change_7d }}%
-            </td>
-            <td>
-              {{ coin.market_cap_gbp | currency('£') }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-else-if="loaded && coins.length === 0">
+        <h1>Error retrieving data...</h1>
+      </div>
+      <div v-else>
+        <h1>Retrieving data...</h1>
+      </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
